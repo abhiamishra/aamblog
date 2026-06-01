@@ -3,7 +3,7 @@ import { defineAstroPaperConfig } from "./src/types/config";
 export default defineAstroPaperConfig({
   site: {
     url: "https://abhiamishra.github.io/aamblog/",
-    title: "My Blog",
+    title: "aamblog",
     description: "Technical writing, MVP showcases, and research notes.",
     author: "Abhi Mishra",
     profile: "https://github.com/abhiamishra",
@@ -28,10 +28,8 @@ export default defineAstroPaperConfig({
     search: "pagefind",
   },
   socials: [
-    { name: "github",   url: "https://github.com/abhiamishra" },
-    { name: "x",        url: "https://x.com/username" },
-    { name: "linkedin", url: "https://www.linkedin.com/in/username/" },
-    { name: "mail",     url: "mailto:abhiamishra0@gmail.com" },
+    { name: "github", url: "https://github.com/abhiamishra" },
+    { name: "mail",   url: "mailto:abhiamishra0@gmail.com" },
   ],
   shareLinks: [
     { name: "whatsapp", url: "https://wa.me/?text=" },
