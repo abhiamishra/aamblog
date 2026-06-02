@@ -8,7 +8,7 @@ tags:
   - research
   - economics
   - india
-description: "Indian traffic is not chaos — it is many Prisoner's Dilemmas occurring simultaneously. An exploration of why rational individual decisions produce collectively irrational gridlock."
+description: "My thoughts as I sat in the passenger seat of Indian traffic"
 ---
 
 <style>{`
@@ -93,12 +93,28 @@ description: "Indian traffic is not chaos — it is many Prisoner's Dilemmas occ
 </p>
 <div class="pd-divider"></div>
 
+# Background
+As I sat in the passenger seat while my dad drove in Indian traffic, my head spun. Indian traffic, for the uninitiated, is pulsating, pumping, a ride full of instantaneous switches, turns, and noises.
+Did I mention it is nauseating? 
+
+After spending hours in the passenger seat and clutching my seat, I began to wonder why this happens. The obvious answers like a lack of law enforcement and other systemic facts jump out. I even asked
+my relatives and they said the same thing. But these are societal and institutional issues. I started to wonder if there is a more behavioral way for why this happens.
+
+Last semester, I studied Game Theory which attempts to inform how we should and would behave in certain games. I decided to see if I could apply Game Theory principles
+to Indian traffic. After much thought, I landed a rough draft of why Indian traffic can be seen as Prisoner's Dilemmas occurring at scale. 
+
+Note: This isn't a rigorous proof nor is it trying to be. This was literally written while the car stopped and I had to find a way to kill the time. I decided to make those scribbles into a 
+proper blog because I think my reasoning is cool. I wrote this when I had little internet access. Searching this on Google, I found that
+other people had thought the same! And that was cool. 
+
+Hope you enjoy!
+
+
 ## 1) Defining Prisoner's Dilemma
 
 Two suspects are placed in separate rooms with a wall between them — no communication allowed. They have been caught in a theft.
 
 <div class="pd-canvas-block">
-  <div class="pd-canvas-label">// isolation.gif — Jann &amp; Bob, separated, cannot communicate</div>
   <canvas id="c-isolation" height="180"></canvas>
 </div>
 
@@ -183,7 +199,7 @@ The two-driver case is illustrative but simplified. A real urban road is not one
 
 <div class="pd-canvas-block">
   <div class="pd-canvas-label">// many_PDs.gif — top-down view: the whole road as simultaneous Prisoner's Dilemmas</div>
-  <canvas id="c-manypds" height="320"></canvas>
+  <canvas id="c-cutlane-pd" height="640"></canvas>
 </div>
 
 Each cell in the animation above represents an independent PD encounter. The key property is that the outcomes of adjacent PDs interact: when Drivers A and B deadlock in PD #1, they block the approach lanes for PD #2 and PD #3. One defection cascades into forced defection for others who had no intent to defect — they simply have nowhere to go.
@@ -225,7 +241,7 @@ The claim is not that every Indian driver is making a calculated game-theoretic 
 
 In India, every second counts. And so everyone defects. And so everyone loses more seconds than they saved.
 
-<script is:inline>
+<script is:inline set:html={`
 (function () {
   function init(id, h) {
     var c = document.getElementById(id);
@@ -288,91 +304,264 @@ In India, every second counts. And so everyone defects. And so everyone loses mo
       ctx.globalAlpha = 1.2 - a;
       ctx.fillText('DEFECT?', mid + 130, 52 + Math.cos(t1 * 0.08) * 4);
       ctx.globalAlpha = 1;
-      ctx.fillStyle = 'rgba(180,180,180,.7)'; ctx.font = 'italic 12px serif';
-      ctx.fillText('no communication', mid, H - 12);
+      ctx.fillStyle = 'rgba(180,180,180,.7)'; ctx.font = 'italic 15px serif';
+      ctx.fillText('no communication', mid, H - 6);
       t1++; requestAnimationFrame(frame);
     })();
   }
 
-  // Animation 2: Two Drivers
-  var r2 = init('c-twodrivers', 200);
-  if (r2) {
-    var t2 = 0;
-    (function frame() {
-      var ctx = r2.ctx, W = r2.W, H = r2.H;
-      ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = '#2a2a2a'; ctx.fillRect(0, 0, W, H);
-      ctx.fillStyle = '#3a3a3a';
-      ctx.fillRect(0, H / 2 - 26, W, 52); ctx.fillRect(W / 2 - 24, 0, 48, H);
-      ctx.setLineDash([16, 12]); ctx.strokeStyle = '#666'; ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(0, H / 2); ctx.lineTo(W, H / 2); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H); ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.strokeStyle = '#ffcc00'; ctx.lineWidth = 2;
-      ctx.strokeRect(W / 2 - 24, H / 2 - 26, 48, 52);
-      var ax = (W * 0.04 + t2 * 0.8) % (W * 1.15) - W * 0.06;
-      var by = ((t2 * 0.62 + H * 0.6) % (H + 50)) - 25;
-      car(ctx, ax, H / 2 - 9, '#2d6a4f', 0);
-      car(ctx, W / 2, by, '#c0392b', Math.PI / 2);
-      ctx.fillStyle = '#2d6a4f'; ctx.font = '600 15px IBM Plex Mono,monospace'; ctx.textAlign = 'center';
-      ctx.fillText('ANIL', ax, H / 2 + 30);
-      ctx.fillStyle = '#c0392b';
-      ctx.save(); ctx.translate(W / 2 + 44, by); ctx.fillText('SHREYA', 0, 4); ctx.restore();
-      var nearA = ax > W / 2 - 95 && ax < W / 2 + 95;
-      var nearB = by > H / 2 - 65 && by < H / 2 + 65;
-      if (nearA && nearB) {
-        ctx.save(); ctx.globalAlpha = Math.sin(t2 * 0.22) * 0.35 + 0.4;
-        ctx.fillStyle = '#ffcc00'; ctx.beginPath(); ctx.arc(W / 2, H / 2, 32, 0, 7); ctx.fill(); ctx.restore();
-        ctx.fillStyle = '#c0392b'; ctx.font = '700 15px IBM Plex Mono,monospace'; ctx.textAlign = 'center';
-        ctx.fillText('WHO GOES FIRST?', W / 2, H - 12);
-      }
-      t2++; requestAnimationFrame(frame);
-    })();
+  // Animation 2: Four-way intersection, keep-left road. 3 lanes wide x 2 deep.
+// Front layer: A (lane1)  SHREYA (lane2, drifted toward A)  B (lane3)
+// Back  layer: C (lane1)  D (lane2)  ANIL (lane3, stuck behind B)
+// Anil squeezes into the gap between Shreya & B, then turns right (east).
+var r2 = init('c-twodrivers', 300);
+if (r2) {
+  var t2 = 0;
+  (function frame() {
+    var ctx = r2.ctx, W = r2.W, H = r2.H;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#1f1f1f'; ctx.fillRect(0, 0, W, H);
+
+    var vCx = W * 0.5;
+    var crossY = 96, hHalf = 44, ixT = crossY - hHalf, ixB = crossY + hHalf;
+    var ixL = vCx - 156, ixR = vCx + 104;            // vertical road edges
+    var F1 = vCx - 130, F2 = vCx - 78, F3 = vCx - 26; // forward lanes (curb -> median)
+    var O1 = vCx + 26, O2 = vCx + 78;                 // opposite lanes
+    var shreyaX = F2 - 15;                            // Shreya drifted toward A
+
+    // surfaces
+    ctx.fillStyle = '#3a3a3a';
+    ctx.fillRect(0, ixT, W, ixB - ixT);
+    ctx.fillRect(ixL, 0, ixR - ixL, H);
+
+    // dashed lines skipping the intersection box
+    ctx.lineWidth = 2;
+    function vDash(x, color) {
+      ctx.setLineDash([16, 12]); ctx.strokeStyle = color;
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, ixT); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x, ixB); ctx.lineTo(x, H); ctx.stroke();
+    }
+    vDash(vCx - 104, '#888'); vDash(vCx - 52, '#888'); vDash(vCx + 52, '#888');
+    ctx.setLineDash([]); ctx.strokeStyle = '#d4b106';   // double-yellow median
+    [vCx - 4, vCx + 4].forEach(function (x) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, ixT); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x, ixB); ctx.lineTo(x, H); ctx.stroke();
+    });
+    ctx.setLineDash([16, 12]); ctx.strokeStyle = '#888'; // horizontal centerline
+    ctx.beginPath(); ctx.moveTo(0, crossY); ctx.lineTo(ixL, crossY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ixR, crossY); ctx.lineTo(W, crossY); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // stop line across forward lanes
+    ctx.strokeStyle = '#ddd'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(ixL, ixB + 6); ctx.lineTo(vCx, ixB + 6); ctx.stroke();
+
+    var up = -Math.PI / 2, down = Math.PI / 2, gray = '#5a6470';
+    var frontY = 172, backY = 230;
+
+    // the gap (pulsing) between Shreya and B
+    var ga = 0.10 + Math.sin(t2 * 0.06) * 0.06;
+    ctx.fillStyle = 'rgba(255,204,0,' + ga + ')';
+    ctx.fillRect(shreyaX + 18, frontY - 20, (F3 - 18) - (shreyaX + 18), 40);
+
+    var pocketX = (shreyaX + 18 + F3 - 18) / 2; // center of that gap
+
+    // ---- Anil: squeeze into the gap, then turn right (east) ----
+    ctx.save();
+    ctx.strokeStyle = '#2d6a4f'; ctx.lineWidth = 3;
+    ctx.setLineDash([10, 8]); ctx.lineDashOffset = -t2 * 0.7;
+    ctx.beginPath();
+    ctx.moveTo(F3, backY - 24);                                  // Anil's front (behind B)
+    ctx.bezierCurveTo(F3, frontY + 18, pocketX, frontY + 20, pocketX, frontY); // into the pocket
+    ctx.lineTo(pocketX, crossY + 30);                           // up into the intersection
+    ctx.quadraticCurveTo(pocketX, crossY + 6, W - 12, crossY + 6); // right turn, exit east
+    ctx.stroke(); ctx.restore();
+    ctx.fillStyle = '#2d6a4f';
+    ctx.beginPath();
+    ctx.moveTo(W - 4, crossY + 6); ctx.lineTo(W - 18, crossY); ctx.lineTo(W - 18, crossY + 12);
+    ctx.closePath(); ctx.fill();
+
+    // ---- Shreya: straight through (north) ----
+    ctx.save();
+    ctx.strokeStyle = 'rgba(192,57,43,0.5)'; ctx.lineWidth = 2;
+    ctx.setLineDash([8, 7]); ctx.lineDashOffset = -t2 * 0.7;
+    ctx.beginPath(); ctx.moveTo(shreyaX, frontY - 24); ctx.lineTo(shreyaX, 14); ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = 'rgba(192,57,43,0.7)';
+    ctx.beginPath();
+    ctx.moveTo(shreyaX, 4); ctx.lineTo(shreyaX - 6, 16); ctx.lineTo(shreyaX + 6, 16);
+    ctx.closePath(); ctx.fill();
+
+    // cars
+    car(ctx, F1, frontY, gray, up);
+    car(ctx, shreyaX, frontY, '#c0392b', up);   // SHREYA
+    car(ctx, F3, frontY, gray, up);             // B
+    car(ctx, F1, backY, gray, up);
+    car(ctx, F2, backY, gray, up);
+    car(ctx, F3, backY, '#2d6a4f', up);         // ANIL
+    car(ctx, O2, 30, gray, down);               // opposite-direction context
+    car(ctx, O1, 180, gray, down);
+    car(ctx, O2, 255, gray, down);
+
+    // labels (front row staggered above/below to handle Shreya being tight to A)
+    ctx.textAlign = 'center';
+    ctx.font = '600 11px IBM Plex Mono,monospace'; ctx.fillStyle = '#cfd6dd';
+    ctx.fillText('A', F1, frontY - 22);
+    ctx.fillText('B', F3, frontY - 22);
+    ctx.fillText('C', F1, backY + 24);
+    ctx.fillText('D', F2, backY + 24);
+    ctx.font = '600 12px IBM Plex Mono,monospace';
+    ctx.fillStyle = '#c0392b'; ctx.fillText('SHREYA', shreyaX, frontY + 24);
+    ctx.fillStyle = '#2d6a4f'; ctx.fillText('ANIL', F3, backY + 24);
+
+    t2++;
+    requestAnimationFrame(frame);
+  })();
+}
+
+var r3 = init('c-cutlane-pd', 640);
+if (r3) {
+  var t3 = 0;
+  var RED = '#c0392b', TEAL = '#2d6a4f', GRAY = '#5a6470';
+
+  function L2W(cx, cy, c, s, u, v) { return [cx + c * u - s * v, cy + s * u + c * v]; }
+
+  function pair(ctx, cx, cy, th, t, idx) {
+    var c = Math.cos(th), s = Math.sin(th);
+    var cutter = L2W(cx, cy, c, s, -38, 24);
+    var lead   = L2W(cx, cy, c, s, -10, -24);
+    var gap    = L2W(cx, cy, c, s,  34, -24);
+    var pst    = L2W(cx, cy, c, s, -14, 24);
+    var pct    = L2W(cx, cy, c, s,  22, 24);
+
+    var a = 0.10 + Math.sin(t * 0.06 + idx) * 0.07;
+    ctx.fillStyle = 'rgba(255,204,0,' + a + ')';
+    ctx.beginPath(); ctx.ellipse(gap[0], gap[1], 26, 18, th, 0, 7); ctx.fill();
+
+    ctx.save();
+    ctx.strokeStyle = RED; ctx.lineWidth = 2.5; ctx.setLineDash([8, 7]);
+    ctx.lineDashOffset = -t * 0.8 + idx * 3;
+    ctx.beginPath(); ctx.moveTo(pst[0], pst[1]);
+    ctx.quadraticCurveTo(pct[0], pct[1], gap[0], gap[1]); ctx.stroke();
+    ctx.restore();
+
+    var dx = gap[0] - pct[0], dy = gap[1] - pct[1], dl = Math.hypot(dx, dy) || 1;
+    dx /= dl; dy /= dl; var px = -dy, py = dx;
+    ctx.fillStyle = RED; ctx.beginPath();
+    ctx.moveTo(gap[0] + dx * 4, gap[1] + dy * 4);
+    ctx.lineTo(gap[0] - dx * 9 + px * 6, gap[1] - dy * 9 + py * 6);
+    ctx.lineTo(gap[0] - dx * 9 - px * 6, gap[1] - dy * 9 - py * 6);
+    ctx.closePath(); ctx.fill();
+
+    car(ctx, lead[0], lead[1], TEAL, th);
+    car(ctx, cutter[0], cutter[1], RED, th);
   }
 
-  // Animation 3: Many PDs
-  var r3 = init('c-manypds', 320);
-  if (r3) {
-    var t3 = 0;
-    var pairs = [
-      { label: 'PD #1', cx: 0.20, cy: 0.28, ca: '#2d6a4f', cb: '#c0392b' },
-      { label: 'PD #2', cx: 0.55, cy: 0.22, ca: '#1a3a5c', cb: '#8d6e2e' },
-      { label: 'PD #3', cx: 0.82, cy: 0.35, ca: '#c0392b', cb: '#2d6a4f' },
-      { label: 'PD #4', cx: 0.30, cy: 0.68, ca: '#8d6e2e', cb: '#1a3a5c' },
-      { label: 'PD #5', cx: 0.68, cy: 0.72, ca: '#2d6a4f', cb: '#c0392b' },
-    ];
-    (function frame() {
-      var ctx = r3.ctx, W = r3.W, H = r3.H;
-      ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = '#2a2a2a'; ctx.fillRect(0, 0, W, H);
-      ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.lineWidth = 10;
-      pairs.forEach(function (p) {
-        var X = W * p.cx, Y = H * p.cy;
-        ctx.beginPath(); ctx.moveTo(X - 70, Y); ctx.lineTo(X + 70, Y); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(X, Y - 55); ctx.lineTo(X, Y + 55); ctx.stroke();
-      });
-      pairs.forEach(function (p, i) {
-        var X = W * p.cx, Y = H * p.cy;
-        var phase = t3 * 0.9 + i * 40;
-        var off = (phase % 80) - 40;
-        var off2 = ((phase + 40) % 80) - 40;
-        ctx.save();
-        ctx.setLineDash([6, 5]); ctx.strokeStyle = 'rgba(255,255,255,.15)'; ctx.lineWidth = 1;
-        ctx.strokeRect(X - 78, Y - 66, 156, 132);
-        ctx.setLineDash([]); ctx.restore();
-        car(ctx, X - 30 - off * 0.4, Y, p.ca, 0);
-        car(ctx, X, Y - 30 - off2 * 0.4, p.cb, Math.PI / 2);
-        var glow = Math.sin(t3 * 0.15 + i) * 0.5 + 0.5;
-        ctx.save(); ctx.globalAlpha = glow * 0.4; ctx.fillStyle = '#ffcc00';
-        ctx.beginPath(); ctx.arc(X, Y, 14, 0, 7); ctx.fill(); ctx.restore();
-        ctx.fillStyle = '#e0d8cc'; ctx.font = '700 14px IBM Plex Mono,monospace'; ctx.textAlign = 'center';
-        ctx.fillText(p.label, X, Y - 72);
-      });
-      ctx.fillStyle = 'rgba(0,0,0,.7)'; ctx.fillRect(0, 0, W, 30);
-      ctx.fillStyle = '#e0d8cc'; ctx.font = '600 13px IBM Plex Mono,monospace'; ctx.textAlign = 'center';
-      ctx.fillText('TOP-DOWN VIEW — hundreds of simultaneous Prisoner’s Dilemmas', W / 2, 20);
-      t3++; requestAnimationFrame(frame);
-    })();
+  // One defection followed to its consequence: A cuts into B's gap, lands there,
+  // and is instantly in a new standoff with a third car C just ahead.
+  function consequence(ctx, cx, cy, th, t) {
+    var c = Math.cos(th), s = Math.sin(th);
+    var landed = L2W(cx, cy, c, s, 34, -24);
+    var carC   = L2W(cx, cy, c, s, 98, -24);
+    var ng     = L2W(cx, cy, c, s, 92,  -4);
+    var nst    = L2W(cx, cy, c, s, 50, -24);
+    var nct    = L2W(cx, cy, c, s, 74, -22);
+
+    car(ctx, carC[0], carC[1], '#2c7fb8', th);
+    ctx.save(); ctx.globalAlpha = 0.55;
+    car(ctx, landed[0], landed[1], RED, th); ctx.restore();
+
+    var a = 0.12 + Math.sin(t * 0.06 + 2) * 0.08;
+    ctx.fillStyle = 'rgba(255,204,0,' + a + ')';
+    ctx.beginPath(); ctx.ellipse(ng[0], ng[1], 24, 16, th, 0, 7); ctx.fill();
+
+    ctx.save();
+    ctx.strokeStyle = RED; ctx.lineWidth = 2.5; ctx.setLineDash([8, 7]);
+    ctx.lineDashOffset = -t * 0.8;
+    ctx.beginPath(); ctx.moveTo(nst[0], nst[1]);
+    ctx.quadraticCurveTo(nct[0], nct[1], ng[0], ng[1]); ctx.stroke();
+    ctx.restore();
+    var dx = ng[0] - nct[0], dy = ng[1] - nct[1], dl = Math.hypot(dx, dy) || 1; dx /= dl; dy /= dl;
+    var px = -dy, py = dx;
+    ctx.fillStyle = RED; ctx.beginPath();
+    ctx.moveTo(ng[0] + dx * 4, ng[1] + dy * 4);
+    ctx.lineTo(ng[0] - dx * 9 + px * 6, ng[1] - dy * 9 + py * 6);
+    ctx.lineTo(ng[0] - dx * 9 - px * 6, ng[1] - dy * 9 - py * 6);
+    ctx.closePath(); ctx.fill();
+
   }
+
+  (function frame() {
+    var ctx = r3.ctx, W = r3.W, H = r3.H, cx = W / 2, cy = H / 2, rW = 95, rH = 95;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#1f1f1f'; ctx.fillRect(0, 0, W, H);
+
+    ctx.fillStyle = '#3a3a3a';
+    ctx.fillRect(0, cy - rH, W, rH * 2);
+    ctx.fillRect(cx - rW, 0, rW * 2, H);
+
+    function vline(x, dash, color) {
+      ctx.setLineDash(dash); ctx.strokeStyle = color; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, cy - rH); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x, cy + rH); ctx.lineTo(x, H); ctx.stroke();
+    }
+    function hline(y, dash, color) {
+      ctx.setLineDash(dash); ctx.strokeStyle = color; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(cx - rW, y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx + rW, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+    vline(cx - rW, [], '#bbb'); vline(cx + rW, [], '#bbb');
+    hline(cy - rH, [], '#bbb'); hline(cy + rH, [], '#bbb');
+    vline(cx - 4, [], '#d4b106'); vline(cx + 4, [], '#d4b106');
+    hline(cy - 4, [], '#d4b106'); hline(cy + 4, [], '#d4b106');
+    vline(cx - 47, [16, 12], '#888'); vline(cx + 47, [16, 12], '#888');
+    hline(cy - 47, [16, 12], '#888'); hline(cy + 47, [16, 12], '#888');
+    ctx.setLineDash([]);
+
+    var E = 0, Wd = Math.PI, S = Math.PI / 2, N = -Math.PI / 2;
+    var pairs = [
+      [cx - W * 0.13, cy - 40, E], [cx - W * 0.27, cy + 45, E], [cx - W * 0.40, cy - 40, E],
+      [cx + W * 0.13, cy + 40, Wd], [cx + W * 0.27, cy - 45, Wd], [cx + W * 0.40, cy + 40, Wd],
+      [cx - 40, cy - H * 0.22, S], [cx + 45, cy - H * 0.40, S],
+      [cx + 40, cy + H * 0.22, N], [cx - 45, cy + H * 0.40, N]
+    ];
+
+    // normal traffic filling the lanes (so the defector visibly deviates)
+    var hLanes = [cy - 71, cy - 24, cy + 24, cy + 71];
+    var vLanes = [cx - 71, cx - 24, cx + 24, cx + 71];
+    var occ = pairs.map(function (p) { return [p[0], p[1]]; });
+    occ.push([cx - W * 0.40 + 34, cy - 64], [cx - W * 0.40 + 98, cy - 64]); // landed A + car C
+    function clear(x, y) {
+      if (x > cx - rW - 28 && x < cx + rW + 28 && y > cy - rH - 28 && y < cy + rH + 28) return false;
+      for (var i = 0; i < occ.length; i++) if (Math.hypot(x - occ[i][0], y - occ[i][1]) < 72) return false;
+      return true;
+    }
+    hLanes.forEach(function (y) {
+      for (var x = cx - rW - 70; x > 20; x -= 150) if (clear(x, y)) car(ctx, x, y, GRAY, 0);
+      for (var x2 = cx + rW + 70; x2 < W - 20; x2 += 150) if (clear(x2, y)) car(ctx, x2, y, GRAY, Math.PI);
+    });
+    vLanes.forEach(function (x) {
+      for (var y = cy - rH - 70; y > 20; y -= 150) if (clear(x, y)) car(ctx, x, y, GRAY, Math.PI / 2);
+      for (var y2 = cy + rH + 70; y2 < H - 20; y2 += 150) if (clear(x, y2)) car(ctx, x, y2, GRAY, -Math.PI / 2);
+    });
+
+    pairs.forEach(function (p, i) { pair(ctx, p[0], p[1], p[2], t3, i); });
+    consequence(ctx, cx - W * 0.40, cy - 40, 0, t3);
+
+    // caption + legend (kept off-road in the corners)
+    ctx.setLineDash([]); ctx.textAlign = 'left';
+    ctx.fillStyle = 'rgba(200,200,200,0.65)'; ctx.font = 'italic 13px serif';
+    ctx.fillText('every open gap is a tiny prisoner\u2019s dilemma', 16, 26);
+    ctx.font = '600 12px IBM Plex Mono,monospace';
+    ctx.fillStyle = RED;  ctx.fillRect(16, H - 34, 12, 12);
+    ctx.fillStyle = '#cfd6dd'; ctx.fillText('cut (defect)', 34, H - 24);
+    ctx.fillStyle = TEAL; ctx.fillRect(140, H - 34, 12, 12);
+    ctx.fillStyle = '#cfd6dd'; ctx.fillText('hold (cooperate)', 158, H - 24);
+
+    t3++;
+    requestAnimationFrame(frame);
+  })();
+}
+
 })();
-</script>
+`}></script>
