@@ -100,6 +100,11 @@ Did I mention it is nauseating?
 After spending hours in the passenger seat and clutching my seat, I began to wonder why this happens. The obvious answers like a lack of law enforcement and other systemic facts jump out. I even asked
 my relatives and they said the same thing. But these are societal and institutional issues. I started to wonder if there is a more behavioral way for why this happens.
 
+import { Image } from 'astro:assets';
+import indianTraffic from '../../assets/images/indiantraffic.png';
+
+<Image src={indianTraffic} alt="description" />
+
 Last semester, I studied Game Theory which attempts to inform how we should and would behave in certain games. I decided to see if I could apply Game Theory principles
 to Indian traffic. After much thought, I landed a rough draft of why Indian traffic can be seen as Prisoner's Dilemmas occurring at scale. 
 
@@ -145,8 +150,14 @@ Here is why. From Jann's perspective:
 
 Defection is the dominant strategy regardless of what the other player does. The same logic applies symmetrically to Bob. The tragedy is that mutual defection (−5, −5) is worse for both than mutual cooperation (−3, −3) — yet rational self-interest pushes both players away from the cooperative outcome.
 
+Here's another graphic to really instill the concept:
+
+import prisonerdilemma from '../../assets/images/prisonerdilemma.png';
+
+<Image src={prisonerdilemma} alt="description" />
+
 <div class="pd-insight">
-  That is the key insight. Long-term rewards and credible punishment can shift behaviour — but only when there is a shared desired future and a mechanism to enforce consequences.
+  Insight: Long-term rewards and credible punishment can shift behaviour — but only when there is a shared desired future and a mechanism to enforce consequences.
 </div>
 
 ---
@@ -159,7 +170,7 @@ Consider two drivers — Anil and Shreya — approaching the same intersection.
   <canvas id="c-twodrivers" height="200"></canvas>
 </div>
 
-Framing the encounter as a Prisoner's Dilemma requires us to examine whether the two conditions for cooperation are present.
+Framing the encounter as a Prisoner's Dilemma requires us to examine whether conditions for cooperation are present.
 
 <p class="pd-h3">1) Is there a shared future reward?</p>
 
@@ -167,13 +178,16 @@ Anil and Shreya are strangers travelling in different directions. They will almo
 
 <p class="pd-h3">2) Why is the threat of an accident not sufficient to enforce cooperation? </p>
 
-One might argue that *safety* is a shared future reward — both drivers prefer not to crash. This is true in principle. But in practice, the probability of a collision at a slow-moving urban intersection feels low to each driver. The immediate cost of waiting (time lost, perceived status loss, the car behind honking) outweighs a diffuse probabilistic safety benefit. Safety works as a deterrent at high speeds; at 10 km/h in a congested crossing, it does not.
+One might argue that *safety* is a shared future reward — both drivers prefer not to crash. This is true in principle. But in practice, the probability of a collision at a slow-moving urban intersection feels low to each driver. 
+Safety works as a deterrent at high speeds but not at 10 km/h in a congested crossing.
 
 <p class="pd-h3">3) Is there a credible threat of punishment?</p>
 
 Traffic enforcement in dense Indian urban environments is sparse and inconsistent. Police presence is low relative to the number of intersections. Traffic cameras are present in some corridors but far from universal. The probability of a fine for any single act of cutting a queue or jumping a signal is low enough that it does not constitute a reliable deterrent — particularly when the gain (saving 30–60 seconds) is immediate and the punishment is probabilistic and delayed.
 
 <p class="pd-h3">4) The payoff matrix for two drivers</p>
+
+With the above conditions, let's try to define a payoff matrix just liek before
 
 Let us define:
 - **Cooperate (C):** yield, wait your turn, allow the other driver to pass first
@@ -184,7 +198,9 @@ Let us define:
 | **Anil: C** | −2, −2 | −3, −1 |
 | **Anil: D** | −1, −3 | −5, −5 |
 
-Values represent units of time lost plus stress. Mutual defection (−5, −5) produces gridlock — the intersection seizes up and both lose significantly more time than if either had simply yielded.
+Values represent units of time (the number of seconds) lost.
+
+Mutual defection (−5, −5) produces gridlock — the intersection seizes up and both lose significantly more time than if either had simply yielded.
 
 As in the classical Prisoner's Dilemma, **defection is the dominant strategy for each individual** even though mutual cooperation produces a better collective outcome.
 
@@ -202,18 +218,13 @@ Each cell in the animation above represents an independent PD encounter. The key
 
 This has a structural consequence: **the incentive to defect increases as surrounding defections increase.** If every driver around you is pushing forward aggressively, cooperating (waiting) means you may never move at all. Rational response to a defecting environment is to defect yourself. The system locks into a Nash Equilibrium of mutual defection — and it is self-reinforcing.
 
-| | Surrounding drivers: C | Surrounding drivers: D |
-|---|---|---|
-| **You: C** | −2 (short wait, orderly) | −8 (you wait forever) |
-| **You: D** | −1 (you gain time) | −5 (gridlock, but you keep position) |
-
-At scale, the dominant strategy shifts even more decisively toward defection. Cooperation in a sea of defectors is not noble — it is strategically punished.
+At scale, the dominant strategy shifts even more decisively toward defection.
 
 ---
 
 ## 4) What Would Change the Equilibrium?
 
-The classical solution to repeated Prisoner's Dilemmas is the **shadow of the future** — the knowledge that you will encounter this player again, and that defection will be remembered and reciprocated.
+The classical solution to repeated Prisoner's Dilemmas is discounted future rewards + threat of punishment.
 
 Three interventions could plausibly shift Indian traffic toward cooperation:
 
@@ -221,7 +232,7 @@ Three interventions could plausibly shift Indian traffic toward cooperation:
 
 **Reputation mechanisms.** In small, closed communities — apartment complexes, specific market lanes, regular commute corridors — drivers do encounter each other repeatedly. Anecdotally, traffic in these micro-environments tends to be more cooperative. The shadow of the future is present. Extending this to open roads is structurally difficult.
 
-**Infrastructure that removes the choice.** Roundabouts, dedicated turn lanes, and signal timing that physically prevents simultaneous conflicting movement eliminate the PD by removing the option to defect. The game is not resolved — it is abolished.
+**Infrastructure that removes the choice.** Roundabouts, dedicated turn lanes, and signal timing that physically prevents simultaneous conflicting movement eliminate the PD by removing the option to defect.
 
 ---
 
@@ -231,11 +242,9 @@ This is a simplified model. Several factors are not captured:
 
 - Driver skill and experience vary enormously; an experienced driver can often navigate a conflict with minimal loss to both parties
 - Stress, time pressure, and cognitive load shift individual payoff calculations in ways a static matrix cannot represent
-- Cultural norms around assertiveness and patience are not uniform — they vary by city, by neighbourhood, and by time of day
 
-The claim is not that every Indian driver is making a calculated game-theoretic decision. The claim is that the *aggregate structure* of the situation — many anonymous strangers, no repeated interaction, weak enforcement, cascading interdependence — creates conditions in which defection is the individually rational response, and the system converges to a suboptimal collective equilibrium.
+I'm not saying that every Indian driver is making a calculated game-theoretic decision. 
 
-In India, every second counts.
 
 <script is:inline set:html={`
 (function () {
