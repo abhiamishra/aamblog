@@ -3,10 +3,8 @@ title: "About"
 description: "A bit about me and this blog."
 ---
 
-Hey, I'm Abhi — a student juggling classes, marathon training, and a lot of thoughts I want to get out of my head and into writing.
+Ay'ello, my name is Abhi. I'm an AI swe, an ongoing Masters student at GTech, and this is my blog. you probably came from personal website. If you didn't, you should check it out: https://abhiamishra.github.io/
 
-This blog is that attempt. Rather than reaching for an off-the-shelf platform like Substack, I built it myself — partly because I wanted something I could fully control, and partly because the building is half the fun (even when it eats into actual writing time).
-
-Expect technical writing, MVP showcases, and research notes. If you're here, thanks for reading — it means a lot.
+I mostly will talk about my own findings, research that I undertake, and projects that I like. 
 
 You can find me on [GitHub](https://github.com/abhiamishra) or reach me by [email](mailto:abhiamishra0@gmail.com).

@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
-import IconRss from "@/assets/icons/IconRss.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
@@ -34,7 +33,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
     class="app-layout"
   >
     <section id="hero" class="border-border border-b pt-8 pb-6">
-      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
+      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-3xl">
         aamblog
       </h1>
       <a
@@ -44,14 +43,9 @@ const homePath = getRelativeLocaleUrl(locale, "");
         aria-label="RSS Feed"
         title="RSS Feed"
       >
-        <IconRss
-          width={20}
-          height={20}
-          class="stroke-accent scale-125 stroke-3 rtl:-rotate-90"
-        />
+        <span aria-hidden="true" class="text-3xl leading-none">🥭</span>
         <span class="sr-only">RSS Feed</span>
       </a>
-
       <p>
         stick around and read my thoughts about applying ml, evals for ai agents and systems, and alignment.
       </p>

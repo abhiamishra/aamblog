@@ -5,7 +5,7 @@ export default defineAstroPaperConfig({
     url: "https://abhiamishra.github.io/aamblog/",
     title: "aamblog",
     description: "Technical writing, MVP showcases, and research notes.",
-    author: "Abhi Mishra",
+    author: "Abhishek A. Mishra",
     profile: "https://github.com/abhiamishra",
     ogImage: "astropaper-og.jpg",
     lang: "en",

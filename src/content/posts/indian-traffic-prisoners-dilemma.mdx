@@ -156,7 +156,6 @@ Defection is the dominant strategy regardless of what the other player does. The
 Consider two drivers — Anil and Shreya — approaching the same intersection.
 
 <div class="pd-canvas-block">
-  <div class="pd-canvas-label">// two_drivers.gif — Anil &amp; Shreya meet at an intersection. Who goes first?</div>
   <canvas id="c-twodrivers" height="200"></canvas>
 </div>
 
@@ -166,17 +165,15 @@ Framing the encounter as a Prisoner's Dilemma requires us to examine whether the
 
 Anil and Shreya are strangers travelling in different directions. They will almost certainly never encounter each other again. There is no ongoing relationship, no reputation at stake between them specifically, and no repeated game dynamic. The future reward that would incentivise mutual cooperation — "I'll yield today so you yield next time" — simply does not apply here.
 
-<div class="pd-aside">
-  Why is the threat of an accident not sufficient as a future reward for cooperation?
-</div>
+<p class="pd-h3">2) Why is the threat of an accident not sufficient to enforce cooperation? </p>
 
 One might argue that *safety* is a shared future reward — both drivers prefer not to crash. This is true in principle. But in practice, the probability of a collision at a slow-moving urban intersection feels low to each driver. The immediate cost of waiting (time lost, perceived status loss, the car behind honking) outweighs a diffuse probabilistic safety benefit. Safety works as a deterrent at high speeds; at 10 km/h in a congested crossing, it does not.
 
-<p class="pd-h3">2) Is there a credible threat of punishment?</p>
+<p class="pd-h3">3) Is there a credible threat of punishment?</p>
 
 Traffic enforcement in dense Indian urban environments is sparse and inconsistent. Police presence is low relative to the number of intersections. Traffic cameras are present in some corridors but far from universal. The probability of a fine for any single act of cutting a queue or jumping a signal is low enough that it does not constitute a reliable deterrent — particularly when the gain (saving 30–60 seconds) is immediate and the punishment is probabilistic and delayed.
 
-<p class="pd-h3">3) The payoff matrix for two drivers</p>
+<p class="pd-h3">4) The payoff matrix for two drivers</p>
 
 Let us define:
 - **Cooperate (C):** yield, wait your turn, allow the other driver to pass first
@@ -198,7 +195,6 @@ As in the classical Prisoner's Dilemma, **defection is the dominant strategy for
 The two-driver case is illustrative but simplified. A real urban road is not one Prisoner's Dilemma — it is hundreds occurring in parallel, in sequence, and in cascade.
 
 <div class="pd-canvas-block">
-  <div class="pd-canvas-label">// many_PDs.gif — top-down view: the whole road as simultaneous Prisoner's Dilemmas</div>
   <canvas id="c-cutlane-pd" height="640"></canvas>
 </div>
 
@@ -239,7 +235,7 @@ This is a simplified model. Several factors are not captured:
 
 The claim is not that every Indian driver is making a calculated game-theoretic decision. The claim is that the *aggregate structure* of the situation — many anonymous strangers, no repeated interaction, weak enforcement, cascading interdependence — creates conditions in which defection is the individually rational response, and the system converges to a suboptimal collective equilibrium.
 
-In India, every second counts. And so everyone defects. And so everyone loses more seconds than they saved.
+In India, every second counts.
 
 <script is:inline set:html={`
 (function () {
@@ -310,7 +306,7 @@ In India, every second counts. And so everyone defects. And so everyone loses mo
     })();
   }
 
-  // Animation 2: Four-way intersection, keep-left road. 3 lanes wide x 2 deep.
+// Animation 2: Four-way intersection, keep-left road. 3 lanes wide x 2 deep.
 // Front layer: A (lane1)  SHREYA (lane2, drifted toward A)  B (lane3)
 // Back  layer: C (lane1)  D (lane2)  ANIL (lane3, stuck behind B)
 // Anil squeezes into the gap between Shreya & B, then turns right (east).
@@ -403,22 +399,32 @@ if (r2) {
     car(ctx, O1, 180, gray, down);
     car(ctx, O2, 255, gray, down);
 
-    // labels (front row staggered above/below to handle Shreya being tight to A)
-    ctx.textAlign = 'center';
-    ctx.font = '600 11px IBM Plex Mono,monospace'; ctx.fillStyle = '#cfd6dd';
-    ctx.fillText('A', F1, frontY - 22);
-    ctx.fillText('B', F3, frontY - 22);
-    ctx.fillText('C', F1, backY + 24);
-    ctx.fillText('D', F2, backY + 24);
-    ctx.font = '600 12px IBM Plex Mono,monospace';
-    ctx.fillStyle = '#c0392b'; ctx.fillText('SHREYA', shreyaX, frontY + 24);
-    ctx.fillStyle = '#2d6a4f'; ctx.fillText('ANIL', F3, backY + 24);
+    (function () {
+      var lx = 14, ly = H - 64, lw = 124, lh = 50;
+      ctx.fillStyle = 'rgba(20,20,20,0.82)';
+      ctx.strokeStyle = '#555'; ctx.lineWidth = 1;
+      ctx.fillRect(lx, ly, lw, lh);
+      ctx.strokeRect(lx, ly, lw, lh);
+      ctx.textAlign = 'left';
+      ctx.font = '600 12px IBM Plex Mono,monospace';
+
+      ctx.fillStyle = '#c0392b';                 // red swatch
+      ctx.fillRect(lx + 12, ly + 12, 14, 10);
+      ctx.fillStyle = '#cfd6dd';
+      ctx.fillText('Shreya', lx + 34, ly + 21);
+
+      ctx.fillStyle = '#2d6a4f';                 // green swatch
+      ctx.fillRect(lx + 12, ly + 30, 14, 10);
+      ctx.fillStyle = '#cfd6dd';
+      ctx.fillText('Anil', lx + 34, ly + 39);
+    })();
 
     t2++;
     requestAnimationFrame(frame);
   })();
 }
 
+// ANIMATION 3
 var r3 = init('c-cutlane-pd', 640);
 if (r3) {
   var t3 = 0;
