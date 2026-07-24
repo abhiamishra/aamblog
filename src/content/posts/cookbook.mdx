@@ -1,0 +1,202 @@
+---
+title: "Introducing Cookbook"
+pubDatetime: 2026-07-23T10:00:00Z
+featured: true
+draft: false
+tags:
+  - ai
+  - product
+description: "The simplest way to create, share, and send a recipe."
+---
+
+<style>{`
+  .pd-subtitle {
+    font-style: italic;
+    font-size: 15px;
+    color: var(--muted-foreground);
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+    text-align: center;
+  }
+  .pd-divider {
+    width: 56px;
+    height: 2px;
+    background: var(--accent);
+    margin: 0 auto 2rem;
+  }
+  .pd-insight {
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    padding: 20px 26px;
+    margin: 32px 0;
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.75;
+    border-left: 4px solid var(--accent);
+  }
+  .pd-aside {
+    margin: 20px 0 20px 28px;
+    padding-left: 16px;
+    border-left: 2px solid var(--accent);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--muted-foreground);
+  }
+  .pd-canvas-block {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin: 28px 0;
+    overflow: hidden;
+  }
+  .pd-canvas-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 6px 12px;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+  }
+  .pd-canvas-block canvas {
+    display: block;
+    width: 100%;
+  }
+  .pd-legend {
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-top: 10px;
+    padding: 12px 14px;
+    border-left: 3px solid var(--accent);
+    line-height: 1.8;
+    color: var(--muted-foreground);
+    opacity: 0.85;
+  }
+  .pd-mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    padding: 2px 7px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+  .pd-h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 28px 0 10px;
+    letter-spacing: 0.04em;
+  }
+  .pd-video {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin: 28px 0;
+  }
+  .pd-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+`}</style>
+
+# Cookbook
+
+Cookbook is the simplest way to create, share, and send recipes. It requires no login, is free to use,
+and supports your cooking dreams. 
+
+The joy of your creations deserves to be shared amongst everyone. With Cookbook, it happens under minutes.
+
+Make your recipe and share it your friends here: www.yourcookbook.co
+
+Watch a quick demo:
+
+<div className="pd-video">
+  <iframe
+    src="https://www.youtube.com/embed/6XTLRVZ9RUI"
+    title="Cookbook demo"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  />
+</div>
+
+## Reasoning
+Making and sharing recipes is way harder than it needs to be. Seriously.
+
+On Instagram, recipes look like this:
+
+import { Image } from 'astro:assets';
+import cb1 from '../../assets/images/cookbook1.png';
+
+<Image src={cb1} alt="description" />
+
+And it's even worse on messaging platforms:
+
+import cb2 from '../../assets/images/cookbook2.png';
+
+<Image src={cb2} alt="description" />
+
+This is so ugly, unintuitive, and so easily forgettable.
+
+We are in 2026. We can do better.
+
+## Why not an app
+
+Because not everything needs to be an app.
+
+I want simple, ephemeral creation of recipes with the immediate call to action to share these recipes.
+
+No hassle, no login, no setup.
+
+## What is Cookbook not?
+Let's start with what it isn't.
+
+It isn't:
+- a calorie tracking app
+- an accurate calorie tracking app
+- a recipe app to store your recipes in a collection (yet.. we'll see if people want this)
+
+## So, what is Cookbook?
+
+With Cookbook, you can:
+- easily create recipes,
+- add ingredients (in any language), 
+- get a rough estimation of macros,
+- share it with your friends.
+
+That's literally it. 
+
+Your friends can copy the recipe if they want to and add edits. Or, they can just download an image and save it on their phone.
+
+import cb4 from '../../assets/images/cookbook4.png';
+
+<Image src={cb4} alt="description" />
+
+When you message someone, Cookbook intelligently shows a macro preview:
+
+import cb3 from '../../assets/images/cookbook3.png';
+
+<Image src={cb3} alt="description" />
+
+### Integrations
+At Cookbook, we also know that you track your calories with much more accurate platforms.
+
+As such, we have a "Copy Meal Description" that copies it such that you can paste it other apps such as Macrofactor.
+
+For the above meal shown (which you can access here: https://yourcookbook.co/r/Xw0uCaaD), the following is the meal description:
+
+"75 g Onuva Vital Wheat Gluten (Seitan), 150 g White Rice, 50 g Onions and Tomato Salad"
+
+Simply paste it into your calorie tracking app of your choice and enjoy!
+
+We don't care about your macros, we care about your recipes :)
+
+### Multilingualism
+Make recipes with the culture you grew up with.
+
+Write your ingredients in any language - Hindi, Spanish, Tagalog... our AI-powered application
+can decipher and give you a rough summary of what you have.
