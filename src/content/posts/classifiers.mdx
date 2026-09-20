@@ -1,0 +1,93 @@
+---
+title: It's All Classifiers All The Way Down
+description: What Jev shows the industry.
+pubDatetime: 2026-09-20T12:00:00Z
+tags:
+  - ai
+  - notes
+draft: false
+featured: true
+---
+
+# What is Jev?
+
+A few days ago, "Jev" from TypeSafeAI was released. Jev is unlike an autoregressive model that generates text considering the previous token.
+Instead, it can be thought of as a general purpose classifier. You give a prompt and structured output and it'll give you the answers with probabilities.
+
+You might ask: can't I do the same with LLMs?
+
+You can but the LLM still has to *generate* each word, each character with some probability. Jev outputs a probability distribution over the answer choices.
+In other words, Jev doesn't "think" about the token and generating a structure. It just tells you the probability for that question, context, and answer choices.
+
+Tech Twitter has been lit afire and the demos and posts have been endless. 
+
+Companies like Cloudflare and Vercel are already supporting it and others like Langchain are discussing it's implications for eval:
+
+<blockquote class="twitter-tweet" data-theme="dark"><p lang="en" dir="ltr">We tested Jev against LLM judges on accuracy, repeatability, latency, and cost to see whether System One models could offer a new approach to agent evaluation. https://t.co/hrqdNpm0g8</p>&mdash; LangChain (@LangChain) <a href="https://x.com/LangChain/status/2101454284927959080?ref_src=twsrc%5Etfw">September 19, 2026</a></blockquote>
+<script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
+
+# What it looks like
+
+I got access to the waitlist - thanks TypeSafeAI! - and played around with it:
+
+import { Image } from 'astro:assets';
+import jev1 from '../../assets/images/jev-1.png';
+
+<Image src={jev1} alt="description" />
+
+It's fast and what's most critical: you can see the probability go up and down as you add more/less context.
+For interpretability purposes, this is great! You can start to understand where the confidence lies and what context is important, if at all.
+
+# The Return of Classifiers
+Ever since transformers and generative models, traditional ML systems have not been in the limelight. It's hard to compete with the power of large language models.
+However, the sticking point remains at speed, cost, and interpretability. Especially for industries. The first two have been the focus from the heavy weights of OpenAI and Anthropic. The latter has been getting more and more difficult.
+
+In all of this, those close to traditional ML may have felt left out. There are advances in tabular foundational models (TabPFN) that promise great performance at very high speeds.
+
+However, if you look closely past the hype, the writing has been on the wall for a very long time.
+
+People have yearned for determinism. The people need determinism. Industries and workflows need determinism. So many of our harnesses and tools are systems to make LLMs deterministic.
+And the revolution of the classifiers had quietly begun ever since the first LLM-as-a-Judge [4][5]. Hamel Husain who has been at the forefront of AI evals has been making the case of treating LLMs-as-a-Judge as classifiers [1][2][3].
+As such, I am not surprised to see a model like Jev that leans into that paradigm and brings us back to traditional ML. 
+
+And the reactions of people using Jev have been incredulous and amazed. 
+
+I am happy to see this. It also shows that so much of the industry has *forgotten* the basics. Classifiers are like *really* good. XGBoost and RandomForests can still be on par with LLMs.
+As always, the moat is data and that is especially the case for Jev. Jev's secret sauce is their new training technique called RLCD: Reinforcement Learning for Calibrated Decisions.
+
+This is a good table discussing the differences of RLCD, RLHF, and RLVR [6]:
+
+| Method | What the reward signal measures | Where it's used |
+| --- | --- | --- |
+| RLHF (Reinforcement Learning from Human Feedback) | Whether a human rater prefers this output over an alternative | Chat models, general-purpose LLM alignment — the technique Almeida helped pioneer at OpenAI |
+| RLVR (Reinforcement Learning with Verifiable Rewards) | Whether the output is objectively, verifiably correct (a passing test case, a matching numeric answer) | Reasoning models on math and code, where ground truth exists to check against |
+| RLCD (Reinforcement Learning for Calibrated Decisions) | Whether the model's stated confidence matches its actual accuracy across many decisions | Jev's structured Choice/Score/Noul primitives |
+
+RLCD allows the model to match accuracy while RLHF allows the model to match human preference. It is becoming clear that human preference is subjective and messy - as it should be! However, translating that to engineering is a messy task of making systems to clamp down on those very preferences.
+
+# Taking a step back
+
+I am happy to see Jev and their efforts. It is clear that workflows can work on an ensemble of decisions (did someone say decision trees!) and an intelligent classifier that knows about the world can pretty much get you to those decisions. At the very least, it can help you understand them.
+
+I am also really happy to see interpretability be a main asset of a product. My own efforts with my intern during the summer were focused on adding these same probabilities to LLM-as-a-Judge to enhance developer calibration and understanding.
+Seeing those as a first-class asset is a win for interpretability in a world where that seems to be going diminishing. We need this interpretability for our engineers to make strong, capable, and explainable workflows.
+
+If Jev survives the current hype circle and becomes a staple remain to be seen. The AI environment is conducive to these massive rollercoasters where something becomes known and then no one speaks of it.
+
+But, I am happy to see classifiers again. 
+
+Welcome back, old friend. We've missed you.
+
+# References
+
+[1] H. Husain, "Using LLM-as-a-judge for evaluation: A complete guide," Hamel's Blog, Oct. 29, 2024. [Online]. Available: https://hamel.dev/blog/posts/llm-judge/
+
+[2] H. Husain, "The revenge of the data scientist," Hamel's Blog, 2026. [Online]. Available: https://hamel.dev/blog/posts/revenge/
+
+[3] H. Husain and S. Shankar, "AI evals: Everything you need to know," Hamel's Blog, 2025. [Online]. Available: https://hamel.dev/blog/posts/evals-faq/
+
+[4] J. Fu, S.-K. Ng, Z. Jiang, and P. Liu, "GPTScore: Evaluate as you desire," arXiv preprint arXiv:2302.04166, Feb. 2023. [Online]. Available: https://arxiv.org/abs/2302.04166
+
+[5] L. Zheng, W.-L. Chiang, Y. Sheng, S. Zhuang, Z. Wu, Y. Zhuang, Z. Lin, Z. Li, D. Li, E. P. Xing, H. Zhang, J. E. Gonzalez, and I. Stoica, "Judging LLM-as-a-judge with MT-Bench and Chatbot Arena," arXiv preprint arXiv:2306.05685, Jun. 2023. [Online]. Available: https://arxiv.org/abs/2306.05685
+
+[6] Y. Thakker, "How does Jev work? RLCD & parallel inference explained," explainx.ai Blog, Sep. 16, 2026. [Online]. Available: https://explainx.ai/blog/how-does-jev-work-rlcd-system-one-model-explained-2026
